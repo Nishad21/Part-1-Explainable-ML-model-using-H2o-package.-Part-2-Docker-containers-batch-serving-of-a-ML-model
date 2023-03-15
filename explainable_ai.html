@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>explainable_ai</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="cell code" data-execution_count="1">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install h2o</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>Collecting h2o
+  Downloading h2o-3.36.1.4.tar.gz (177.1 MB)
+Requirement already satisfied: requests in c:\users\sri\anaconda3\lib\site-packages (from h2o) (2.25.1)
+Requirement already satisfied: tabulate in c:\users\sri\anaconda3\lib\site-packages (from h2o) (0.8.9)
+Requirement already satisfied: future in c:\users\sri\anaconda3\lib\site-packages (from h2o) (0.18.2)
+Requirement already satisfied: certifi&gt;=2017.4.17 in c:\users\sri\anaconda3\lib\site-packages (from requests-&gt;h2o) (2020.12.5)
+Requirement already satisfied: idna&lt;3,&gt;=2.5 in c:\users\sri\anaconda3\lib\site-packages (from requests-&gt;h2o) (2.10)
+Requirement already satisfied: chardet&lt;5,&gt;=3.0.2 in c:\users\sri\anaconda3\lib\site-packages (from requests-&gt;h2o) (4.0.0)
+Requirement already satisfied: urllib3&lt;1.27,&gt;=1.21.1 in c:\users\sri\anaconda3\lib\site-packages (from requests-&gt;h2o) (1.26.4)
+Building wheels for collected packages: h2o
+  Building wheel for h2o (setup.py): started
+  Building wheel for h2o (setup.py): finished with status &#39;done&#39;
+  Created wheel for h2o: filename=h2o-3.36.1.4-py2.py3-none-any.whl size=177128127 sha256=c8011749fd66407cddfbf3e98d0aff84d1218fa56b69b0b61ca9336519ded4c3
+  Stored in directory: c:\users\sri\appdata\local\pip\cache\wheels\f7\74\3d\645d819eab17de3e8158807b48d75ffff86f58a3ec8a89c66c
+Successfully built h2o
+Installing collected packages: h2o
+Successfully installed h2o-3.36.1.4
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="1">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> h2o</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> h2o.automl <span class="im">import</span> H2OAutoML</span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="3">
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>h2o.init()</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>Checking whether there is an H2O instance running at http://localhost:54321 ..... not found.
+Attempting to start a local H2O server...
+; Java HotSpot(TM) 64-Bit Server VM (build 18.0.2+9-61, mixed mode, sharing)
+  Starting server from C:\Users\sri\anaconda3\Lib\site-packages\h2o\backend\bin\h2o.jar
+  Ice root: C:\Users\sri\AppData\Local\Temp\tmp1elh_4a1
+  JVM stdout: C:\Users\sri\AppData\Local\Temp\tmp1elh_4a1\h2o_sri_started_from_python.out
+  JVM stderr: C:\Users\sri\AppData\Local\Temp\tmp1elh_4a1\h2o_sri_started_from_python.err
+  Server is running at http://127.0.0.1:54321
+Connecting to H2O server at http://127.0.0.1:54321 ... successful.
+</code></pre>
+</div>
+<div class="output display_data">
+<div style="overflow:auto"><table style="width:50%"><tr><td>H2O_cluster_uptime:</td>
+<td>08 secs</td></tr>
+<tr><td>H2O_cluster_timezone:</td>
+<td>Asia/Kolkata</td></tr>
+<tr><td>H2O_data_parsing_timezone:</td>
+<td>UTC</td></tr>
+<tr><td>H2O_cluster_version:</td>
+<td>3.36.1.4</td></tr>
+<tr><td>H2O_cluster_version_age:</td>
+<td>1 month and 3 days </td></tr>
+<tr><td>H2O_cluster_name:</td>
+<td>H2O_from_python_sri_896tfa</td></tr>
+<tr><td>H2O_cluster_total_nodes:</td>
+<td>1</td></tr>
+<tr><td>H2O_cluster_free_memory:</td>
+<td>990 Mb</td></tr>
+<tr><td>H2O_cluster_total_cores:</td>
+<td>0</td></tr>
+<tr><td>H2O_cluster_allowed_cores:</td>
+<td>0</td></tr>
+<tr><td>H2O_cluster_status:</td>
+<td>locked, healthy</td></tr>
+<tr><td>H2O_connection_url:</td>
+<td>http://127.0.0.1:54321</td></tr>
+<tr><td>H2O_connection_proxy:</td>
+<td>{"http": null, "https": null}</td></tr>
+<tr><td>H2O_internal_security:</td>
+<td>False</td></tr>
+<tr><td>Python_version:</td>
+<td>3.8.8 final</td></tr></table></div>
+</div>
+</div>
+<section id="importing-data" class="cell markdown">
+<h3>importing data</h3>
+</section>
+<div class="cell code" data-execution_count="4">
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>day <span class="op">=</span> h2o.import_file(<span class="st">&quot;day.csv&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>hour <span class="op">=</span> h2o.import_file(<span class="st">&quot;hour.csv&quot;</span>)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>Parse progress: |████████████████████████████████████████████████████████████████| (done) 100%
+Parse progress: |████████████████████████████████████████████████████████████████| (done) 100%
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="5">
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#target column</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="st">&quot;cnt&quot;</span></span></code></pre></div>
+</div>
+<section id="split-into-train--test" class="cell markdown">
+<h3>Split into train &amp; test</h3>
+</section>
+<div class="cell code" data-execution_count="6">
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># splitting day dataset</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>splits_day <span class="op">=</span> day.split_frame(ratios <span class="op">=</span> [<span class="fl">0.8</span>], seed <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>train_day <span class="op">=</span> splits_day[<span class="dv">0</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>test_day <span class="op">=</span> splits_day[<span class="dv">1</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#splitting hour dataset</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>splits_hour <span class="op">=</span> day.split_frame(ratios <span class="op">=</span> [<span class="fl">0.8</span>], seed <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>train_hour <span class="op">=</span> splits_hour[<span class="dv">0</span>]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>test_hour <span class="op">=</span> splits_hour[<span class="dv">1</span>]</span></code></pre></div>
+</div>
+<section id="testing-models-on-day-dataset" class="cell markdown">
+<h3>testing models on Day dataset</h3>
+<h4 id="model-1">model 1</h4>
+</section>
+<div class="cell code" data-execution_count="7">
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run AutoML for 10 minutes</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>aml <span class="op">=</span> H2OAutoML(max_runtime_secs<span class="op">=</span><span class="dv">600</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>aml.train(y<span class="op">=</span>y, training_frame<span class="op">=</span>train_day)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>AutoML progress: |
+12:00:47.154: AutoML: XGBoost is not available; skipping it.
+
+███████████████████████████████████████████████████████████████| (done) 100%
+
+12:10:51.265: GBM_lr_annealing_selection_AutoML_1_20220907_120046 [GBM lr_annealing] failed: water.exceptions.H2OIllegalArgumentException: Can only convert jobs producing a single Model or ModelContainer.
+
+Model Details
+=============
+H2OStackedEnsembleEstimator :  Stacked Ensemble
+Model Key:  StackedEnsemble_BestOfFamily_4_AutoML_1_20220907_120046
+
+No model summary for this model
+
+ModelMetricsRegressionGLM: stackedensemble
+** Reported on train data. **
+
+MSE: 1460.2194126026566
+RMSE: 38.21281738635162
+MAE: 26.05261432210439
+RMSLE: 0.11424117207019883
+R^2: 0.9996161200528048
+Mean Residual Deviance: 1460.2194126026566
+Null degrees of freedom: 581
+Residual degrees of freedom: 578
+Null deviance: 2213837175.773192
+Residual deviance: 849847.6981347462
+AIC: 5902.295488511342
+
+ModelMetricsRegressionGLM: stackedensemble
+** Reported on cross-validation data. **
+
+MSE: 12869.0099177803
+RMSE: 113.4416586522795
+MAE: 71.74775732781472
+RMSLE: 0.13602592868945151
+R^2: 0.996616840726088
+Mean Residual Deviance: 12869.0099177803
+Null degrees of freedom: 581
+Residual degrees of freedom: 579
+Null deviance: 2219192803.1367702
+Residual deviance: 7489763.772148135
+AIC: 7166.864480922589
+
+Cross-Validation Metrics Summary: 
+</code></pre>
+</div>
+<div class="output display_data">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>cv_1_valid</th>
+      <th>cv_2_valid</th>
+      <th>cv_3_valid</th>
+      <th>cv_4_valid</th>
+      <th>cv_5_valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mae</td>
+      <td>7.187669e+01</td>
+      <td>4.969530e+00</td>
+      <td>7.614853e+01</td>
+      <td>7.057756e+01</td>
+      <td>6.533833e+01</td>
+      <td>6.980326e+01</td>
+      <td>7.751577e+01</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mean_residual_deviance</td>
+      <td>1.279381e+04</td>
+      <td>3.463693e+03</td>
+      <td>1.775967e+04</td>
+      <td>1.281228e+04</td>
+      <td>9.813570e+03</td>
+      <td>9.297920e+03</td>
+      <td>1.428563e+04</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>mse</td>
+      <td>1.279381e+04</td>
+      <td>3.463693e+03</td>
+      <td>1.775967e+04</td>
+      <td>1.281228e+04</td>
+      <td>9.813570e+03</td>
+      <td>9.297920e+03</td>
+      <td>1.428563e+04</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>null_deviance</td>
+      <td>4.438386e+08</td>
+      <td>4.686818e+07</td>
+      <td>5.185790e+08</td>
+      <td>4.447762e+08</td>
+      <td>3.909163e+08</td>
+      <td>4.240999e+08</td>
+      <td>4.408214e+08</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>r2</td>
+      <td>9.966537e-01</td>
+      <td>6.533163e-04</td>
+      <td>9.958888e-01</td>
+      <td>9.963971e-01</td>
+      <td>9.972227e-01</td>
+      <td>9.974412e-01</td>
+      <td>9.963185e-01</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>residual_deviance</td>
+      <td>1.495290e+06</td>
+      <td>4.388468e+05</td>
+      <td>2.131160e+06</td>
+      <td>1.601535e+06</td>
+      <td>1.079493e+06</td>
+      <td>1.078559e+06</td>
+      <td>1.585705e+06</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>rmse</td>
+      <td>1.122937e+02</td>
+      <td>1.516332e+01</td>
+      <td>1.332654e+02</td>
+      <td>1.131913e+02</td>
+      <td>9.906347e+01</td>
+      <td>9.642573e+01</td>
+      <td>1.195225e+02</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>rmsle</td>
+      <td>8.636472e-02</td>
+      <td>1.218559e-01</td>
+      <td>4.245856e-02</td>
+      <td>2.986348e-02</td>
+      <td>2.148872e-02</td>
+      <td>3.408593e-02</td>
+      <td>3.039269e-01</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="output execute_result" data-execution_count="7">
+<pre><code></code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="9">
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explain leader model &amp; compare with all AutoML models</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>exa <span class="op">=</span> aml.explain(test_day)</span></code></pre></div>
+<div class="output display_data">
+<h1>Leaderboard</h1>
+</div>
+<div class="output display_data">
+<blockquote>Leaderboard shows models with their metrics. When provided with H2OAutoML object, the leaderboard shows 5-fold cross-validated metrics by default (depending on the H2OAutoML settings), otherwise it shows metrics computed on the frame. At most 20 models are shown by default.</blockquote>
+</div>
+<div class="output display_data">
+<table>
+<thead>
+<tr><th>model_id                                               </th><th style="text-align: right;">   rmse</th><th style="text-align: right;">    mse</th><th style="text-align: right;">    mae</th><th style="text-align: right;">   rmsle</th><th style="text-align: right;">  mean_residual_deviance</th><th style="text-align: right;">  training_time_ms</th><th style="text-align: right;">  predict_time_per_row_ms</th><th>algo           </th></tr>
+</thead>
+<tbody>
+<tr><td>StackedEnsemble_BestOfFamily_4_AutoML_1_20220907_120046</td><td style="text-align: right;">113.442</td><td style="text-align: right;">12869  </td><td style="text-align: right;">71.7478</td><td style="text-align: right;">0.136026</td><td style="text-align: right;">                 12869  </td><td style="text-align: right;">               135</td><td style="text-align: right;">                 0.038672</td><td>StackedEnsemble</td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_170          </td><td style="text-align: right;">116.614</td><td style="text-align: right;">13598.9</td><td style="text-align: right;">72.5635</td><td style="text-align: right;">0.135252</td><td style="text-align: right;">                 13598.9</td><td style="text-align: right;">               476</td><td style="text-align: right;">                 0.022915</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_119          </td><td style="text-align: right;">118.467</td><td style="text-align: right;">14034.3</td><td style="text-align: right;">72.1934</td><td style="text-align: right;">0.133282</td><td style="text-align: right;">                 14034.3</td><td style="text-align: right;">               473</td><td style="text-align: right;">                 0.024988</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_144          </td><td style="text-align: right;">119.997</td><td style="text-align: right;">14399.2</td><td style="text-align: right;">75.3739</td><td style="text-align: right;">0.134049</td><td style="text-align: right;">                 14399.2</td><td style="text-align: right;">               515</td><td style="text-align: right;">                 0.02895 </td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_160          </td><td style="text-align: right;">125.164</td><td style="text-align: right;">15666  </td><td style="text-align: right;">76.854 </td><td style="text-align: right;">0.130777</td><td style="text-align: right;">                 15666  </td><td style="text-align: right;">               442</td><td style="text-align: right;">                 0.024674</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_199          </td><td style="text-align: right;">128.715</td><td style="text-align: right;">16567.5</td><td style="text-align: right;">80.6804</td><td style="text-align: right;">0.152363</td><td style="text-align: right;">                 16567.5</td><td style="text-align: right;">               504</td><td style="text-align: right;">                 0.033355</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_130          </td><td style="text-align: right;">128.745</td><td style="text-align: right;">16575.2</td><td style="text-align: right;">87.5051</td><td style="text-align: right;">0.141222</td><td style="text-align: right;">                 16575.2</td><td style="text-align: right;">               252</td><td style="text-align: right;">                 0.018221</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_12           </td><td style="text-align: right;">129.436</td><td style="text-align: right;">16753.7</td><td style="text-align: right;">81.1774</td><td style="text-align: right;">0.14207 </td><td style="text-align: right;">                 16753.7</td><td style="text-align: right;">               362</td><td style="text-align: right;">                 0.023858</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_58           </td><td style="text-align: right;">129.673</td><td style="text-align: right;">16815.1</td><td style="text-align: right;">82.1813</td><td style="text-align: right;">0.136208</td><td style="text-align: right;">                 16815.1</td><td style="text-align: right;">              1152</td><td style="text-align: right;">                 0.038154</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_32           </td><td style="text-align: right;">134.593</td><td style="text-align: right;">18115.3</td><td style="text-align: right;">85.4334</td><td style="text-align: right;">0.155214</td><td style="text-align: right;">                 18115.3</td><td style="text-align: right;">               448</td><td style="text-align: right;">                 0.033173</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_42           </td><td style="text-align: right;">135.066</td><td style="text-align: right;">18242.9</td><td style="text-align: right;">90.5244</td><td style="text-align: right;">0.152135</td><td style="text-align: right;">                 18242.9</td><td style="text-align: right;">               352</td><td style="text-align: right;">                 0.024331</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_112          </td><td style="text-align: right;">135.286</td><td style="text-align: right;">18302.3</td><td style="text-align: right;">86.8393</td><td style="text-align: right;">0.16457 </td><td style="text-align: right;">                 18302.3</td><td style="text-align: right;">               388</td><td style="text-align: right;">                 0.027562</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_98           </td><td style="text-align: right;">136.104</td><td style="text-align: right;">18524.4</td><td style="text-align: right;">88.0104</td><td style="text-align: right;">0.155452</td><td style="text-align: right;">                 18524.4</td><td style="text-align: right;">               534</td><td style="text-align: right;">                 0.032005</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_181          </td><td style="text-align: right;">137.609</td><td style="text-align: right;">18936.2</td><td style="text-align: right;">84.6463</td><td style="text-align: right;">0.157829</td><td style="text-align: right;">                 18936.2</td><td style="text-align: right;">               371</td><td style="text-align: right;">                 0.023087</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_135          </td><td style="text-align: right;">139.291</td><td style="text-align: right;">19401.9</td><td style="text-align: right;">89.6327</td><td style="text-align: right;">0.160469</td><td style="text-align: right;">                 19401.9</td><td style="text-align: right;">               433</td><td style="text-align: right;">                 0.028824</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_120          </td><td style="text-align: right;">139.333</td><td style="text-align: right;">19413.8</td><td style="text-align: right;">86.556 </td><td style="text-align: right;">0.142031</td><td style="text-align: right;">                 19413.8</td><td style="text-align: right;">               341</td><td style="text-align: right;">                 0.01906 </td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_1_20220907_120046_model_5            </td><td style="text-align: right;">140.643</td><td style="text-align: right;">19780.4</td><td style="text-align: right;">88.0981</td><td style="text-align: right;">0.145773</td><td style="text-align: right;">                 19780.4</td><td style="text-align: right;">               433</td><td style="text-align: right;">                 0.022479</td><td>GBM            </td></tr>
+<tr><td>StackedEnsemble_AllModels_1_AutoML_1_20220907_120046   </td><td style="text-align: right;">141.617</td><td style="text-align: right;">20055.3</td><td style="text-align: right;">90.5924</td><td style="text-align: right;">0.17251 </td><td style="text-align: right;">                 20055.3</td><td style="text-align: right;">               271</td><td style="text-align: right;">                 0.056235</td><td>StackedEnsemble</td></tr>
+<tr><td>StackedEnsemble_BestOfFamily_2_AutoML_1_20220907_120046</td><td style="text-align: right;">142.201</td><td style="text-align: right;">20221.2</td><td style="text-align: right;">91.5813</td><td style="text-align: right;">0.171904</td><td style="text-align: right;">                 20221.2</td><td style="text-align: right;">               279</td><td style="text-align: right;">                 0.031954</td><td>StackedEnsemble</td></tr>
+<tr><td>StackedEnsemble_AllModels_2_AutoML_1_20220907_120046   </td><td style="text-align: right;">142.254</td><td style="text-align: right;">20236.1</td><td style="text-align: right;">91.2729</td><td style="text-align: right;">0.172245</td><td style="text-align: right;">                 20236.1</td><td style="text-align: right;">               291</td><td style="text-align: right;">                 0.057263</td><td>StackedEnsemble</td></tr>
+</tbody>
+</table>
+</div>
+<div class="output display_data">
+<pre><code></code></pre>
+</div>
+<div class="output display_data">
+<h1>Residual Analysis</h1>
+</div>
+<div class="output display_data">
+<blockquote>Residual Analysis plots the fitted values vs residuals on a test dataset. Ideally, residuals should be randomly distributed. Patterns in this plot can indicate potential problems with the model selection, e.g., using simpler model than necessary, not accounting for heteroscedasticity, autocorrelation, etc. Note that if you see "striped" lines of residuals, that is an artifact of having an integer valued (vs a real valued) response variable.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/48c3c97d46f0d91da96f9354e1e473a2d4fe1735.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Variable Importance</h1>
+</div>
+<div class="output display_data">
+<blockquote>The variable importance plot shows the relative importance of the most important variables in the model.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/024dcb747ebfa13c2dbce3cfefc518c83c5a5b88.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Variable Importance Heatmap</h1>
+</div>
+<div class="output display_data">
+<blockquote>Variable importance heatmap shows variable importance across multiple models. Some models in H2O return variable importance for one-hot (binary indicator) encoded versions of categorical columns (e.g. Deep Learning, XGBoost). In order for the variable importance of categorical columns to be compared across all model types we compute a summarization of the the variable importance across all one-hot encoded features and return a single variable importance for the original categorical feature. By default, the models and variables are ordered by their similarity.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/18d56660fddce5ed1dfc04ae06feddcf823bda49.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Model Correlation</h1>
+</div>
+<div class="output display_data">
+<blockquote>This plot shows the correlation between the predictions of the models. For classification, frequency of identical predictions is used. By default, models are ordered by their similarity (as computed by hierarchical clustering). Interpretable models, such as GAM, GLM, and RuleFit are highlighted using red colored text.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/37b32f3d396e9ccfc0b1ddcbfa440fa4b2129374.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>SHAP Summary</h1>
+</div>
+<div class="output display_data">
+<blockquote>SHAP summary plot shows the contribution of the features for each instance (row of data). The sum of the feature contributions and the bias term is equal to the raw prediction of the model, i.e., prediction before applying inverse link function.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/711c8f39d53fba9df4c79994f47024bba40888d9.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Partial Dependence Plots</h1>
+</div>
+<div class="output display_data">
+<blockquote>Partial dependence plot (PDP) gives a graphical depiction of the marginal effect of a variable on the response. The effect of a variable is measured in change in the mean response. PDP assumes independence between the feature for which is the PDP computed and the rest.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/2824d52a282b4c73beeddd2ed1656ec6f4bad236.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/6019666df892fcbc366889c9e432c1b6ee00ec3a.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c1ec8be0f3831ec2c92066d7e985dbc5e058ac8c.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e9174003e3452679f26ade08eaf39eddf8bbfad3.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1b4c68ac85d03c65b5558b0ca6fd8ff0683a5f2b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Individual Conditional Expectation</h1>
+</div>
+<div class="output display_data">
+<blockquote>An Individual Conditional Expectation (ICE) plot gives a graphical depiction of the marginal effect of a variable on the response. ICE plots are similar to partial dependence plots (PDP); PDP shows the average effect of a feature while ICE plot shows the effect for a single instance. This function will plot the effect for each decile. In contrast to the PDP, ICE plots can provide more insight, especially when there is stronger feature interaction.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/83f9e32062234eb34476d073944b5305053e930b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/07e238ad56992df3b025e5cd7ed650d02b42ec31.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c9cc1a1843219274c587d74e173c03da7d4325d3.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1ab45fb58bdf839e254da25e5898a1f435fa2717.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e206989a89be6ae3e43bca5a562b10790a2d31f7.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="10">
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explain a single H2O model (e.g. leader model from AutoML)</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>exm <span class="op">=</span> aml.leader.explain(test_day)</span></code></pre></div>
+<div class="output display_data">
+<h1>Residual Analysis</h1>
+</div>
+<div class="output display_data">
+<blockquote>Residual Analysis plots the fitted values vs residuals on a test dataset. Ideally, residuals should be randomly distributed. Patterns in this plot can indicate potential problems with the model selection, e.g., using simpler model than necessary, not accounting for heteroscedasticity, autocorrelation, etc. Note that if you see "striped" lines of residuals, that is an artifact of having an integer valued (vs a real valued) response variable.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/48c3c97d46f0d91da96f9354e1e473a2d4fe1735.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Partial Dependence Plots</h1>
+</div>
+<div class="output display_data">
+<blockquote>Partial dependence plot (PDP) gives a graphical depiction of the marginal effect of a variable on the response. The effect of a variable is measured in change in the mean response. PDP assumes independence between the feature for which is the PDP computed and the rest.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e9838c037a83a5e04f1b372783b63be5d36dfe92.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/dae9a59958d913abc4eb3ec9fe6c1e33889dad27.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/4fd1fd72076757b4ff1a383ca6368b6910201658.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/bca9cfd60c3af662dd08abb3e4625a82518a2521.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/4f73785bed38c12eba79bcac4d2216fa41499987.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/5b01975afdcea8edd3655cf903235c75048f00e2.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/139488b39928debef38e2539789286ec5fb19b13.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/18c2698986cdfc6fd0182ba9526c3563356a0cb4.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c00d88667b63c0394dddce2c0800b0d90c9d8f3e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/78159462e85e0489f2c591991fb993de7cf6cf3c.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/8cdbcbb7c03c09d337cae0500287c54e2bf5fd87.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c55a57f589adabe97be788b8722b3a070ea667de.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/84f0c04df56e93d59eb2a8b35614e848c13b06c7.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/fc5da8a39ab0b885b4f186211e2b447b8fc4d887.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/072d1f3efbf9831b9cd85ba69366562f3cbf1f58.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Individual Conditional Expectation</h1>
+</div>
+<div class="output display_data">
+<blockquote>An Individual Conditional Expectation (ICE) plot gives a graphical depiction of the marginal effect of a variable on the response. ICE plots are similar to partial dependence plots (PDP); PDP shows the average effect of a feature while ICE plot shows the effect for a single instance. This function will plot the effect for each decile. In contrast to the PDP, ICE plots can provide more insight, especially when there is stronger feature interaction.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c9cc1a1843219274c587d74e173c03da7d4325d3.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1ab45fb58bdf839e254da25e5898a1f435fa2717.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/29e798ca7b3ffc890a48882f5e7be30bd0d4c8fe.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/9a0132450e8295081f78070adabba58404c818eb.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/92c500d5b35184f4e7007d695c28f0c96a91ee71.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/515345b1eb6b520929d712a148d5c04e3a2390b4.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/4bfc24ad5f00f3f38aa6664c959ba154b758bb5c.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/2cd7585d21826ac5af41cbea5be6b744899eeca5.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c584f4b5cf022465d873392245ee8bccb75e6a36.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/72b505d7743776ec48d0b323703cdae48a20aa4b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0b5469fb808ce4b0b90260604ca9b8cab7de227a.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e206989a89be6ae3e43bca5a562b10790a2d31f7.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/8d2a1597521de571b16d8817ab6e1d3ede6481a0.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/07e238ad56992df3b025e5cd7ed650d02b42ec31.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/83f9e32062234eb34476d073944b5305053e930b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="11">
+<div class="sourceCode" id="cb62"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> aml.predict(test_day)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>stackedensemble prediction progress: |███████████████████████████████████████████| (done) 100%
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="12">
+<div class="sourceCode" id="cb64"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>pred</span></code></pre></div>
+<div class="output display_data">
+<table>
+<thead>
+<tr><th style="text-align: right;">  predict</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: right;"> 1359.22 </td></tr>
+<tr><td style="text-align: right;"> 1333.06 </td></tr>
+<tr><td style="text-align: right;"> 1502.78 </td></tr>
+<tr><td style="text-align: right;"> 1751.97 </td></tr>
+<tr><td style="text-align: right;"> 1612.07 </td></tr>
+<tr><td style="text-align: right;"> 1142.82 </td></tr>
+<tr><td style="text-align: right;"> 1469.07 </td></tr>
+<tr><td style="text-align: right;"> 2122.38 </td></tr>
+<tr><td style="text-align: right;">  634.202</td></tr>
+<tr><td style="text-align: right;"> 2009.12 </td></tr>
+</tbody>
+</table>
+</div>
+<div class="output execute_result" data-execution_count="12">
+<pre><code></code></pre>
+</div>
+</div>
+<section id="model-2" class="cell markdown">
+<h3>model 2</h3>
+</section>
+<div class="cell code" data-execution_count="15">
+<div class="sourceCode" id="cb66"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> h2o.estimators <span class="im">import</span> H2ORandomForestEstimator</span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="16">
+<div class="sourceCode" id="cb67"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>day_drf <span class="op">=</span> H2ORandomForestEstimator()</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>day_drf.train(y<span class="op">=</span>y, training_frame<span class="op">=</span>train_day)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>drf Model Build progress: |██████████████████████████████████████████████████████| (done) 100%
+Model Details
+=============
+H2ORandomForestEstimator :  Distributed Random Forest
+Model Key:  DRF_model_python_1662531438760_22
+
+
+Model Summary: 
+</code></pre>
+</div>
+<div class="output display_data">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>number_of_trees</th>
+      <th>number_of_internal_trees</th>
+      <th>model_size_in_bytes</th>
+      <th>min_depth</th>
+      <th>max_depth</th>
+      <th>mean_depth</th>
+      <th>min_leaves</th>
+      <th>max_leaves</th>
+      <th>mean_leaves</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td></td>
+      <td>50.0</td>
+      <td>50.0</td>
+      <td>234037.0</td>
+      <td>14.0</td>
+      <td>20.0</td>
+      <td>17.04</td>
+      <td>351.0</td>
+      <td>385.0</td>
+      <td>368.18</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+ModelMetricsRegression: drf
+** Reported on train data. **
+
+MSE: 62326.14284087241
+RMSE: 249.65204353434083
+MAE: 165.077141119547
+RMSLE: 0.20839974594870989
+Mean Residual Deviance: 62326.14284087241
+
+Scoring History: 
+</code></pre>
+</div>
+<div class="output display_data">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>timestamp</th>
+      <th>duration</th>
+      <th>number_of_trees</th>
+      <th>training_rmse</th>
+      <th>training_mae</th>
+      <th>training_deviance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.017 sec</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.050 sec</td>
+      <td>1.0</td>
+      <td>507.817885</td>
+      <td>374.114679</td>
+      <td>257879.004587</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.066 sec</td>
+      <td>2.0</td>
+      <td>436.339297</td>
+      <td>296.257639</td>
+      <td>190391.982118</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.117 sec</td>
+      <td>3.0</td>
+      <td>429.707350</td>
+      <td>285.670479</td>
+      <td>184648.406938</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.129 sec</td>
+      <td>4.0</td>
+      <td>444.983402</td>
+      <td>288.877500</td>
+      <td>198010.228208</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.142 sec</td>
+      <td>5.0</td>
+      <td>441.603541</td>
+      <td>292.646622</td>
+      <td>195013.687305</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.153 sec</td>
+      <td>6.0</td>
+      <td>394.310477</td>
+      <td>261.969795</td>
+      <td>155480.752471</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.166 sec</td>
+      <td>7.0</td>
+      <td>362.931209</td>
+      <td>244.562418</td>
+      <td>131719.062589</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.177 sec</td>
+      <td>8.0</td>
+      <td>383.200042</td>
+      <td>249.259028</td>
+      <td>146842.272234</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.190 sec</td>
+      <td>9.0</td>
+      <td>363.014676</td>
+      <td>236.951994</td>
+      <td>131779.654705</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.202 sec</td>
+      <td>10.0</td>
+      <td>344.345647</td>
+      <td>231.407941</td>
+      <td>118573.924394</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.214 sec</td>
+      <td>11.0</td>
+      <td>327.605959</td>
+      <td>215.997063</td>
+      <td>107325.664083</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.226 sec</td>
+      <td>12.0</td>
+      <td>325.372951</td>
+      <td>213.807973</td>
+      <td>105867.556932</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.238 sec</td>
+      <td>13.0</td>
+      <td>309.098529</td>
+      <td>207.058426</td>
+      <td>95541.900867</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.249 sec</td>
+      <td>14.0</td>
+      <td>303.290049</td>
+      <td>201.536346</td>
+      <td>91984.854038</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.261 sec</td>
+      <td>15.0</td>
+      <td>306.468292</td>
+      <td>202.347889</td>
+      <td>93922.814278</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.274 sec</td>
+      <td>16.0</td>
+      <td>304.715296</td>
+      <td>202.697807</td>
+      <td>92851.411590</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.287 sec</td>
+      <td>17.0</td>
+      <td>303.476900</td>
+      <td>202.026248</td>
+      <td>92098.228565</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.300 sec</td>
+      <td>18.0</td>
+      <td>308.488280</td>
+      <td>201.976949</td>
+      <td>95165.018953</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td></td>
+      <td>2022-09-07 12:45:29</td>
+      <td>0.312 sec</td>
+      <td>19.0</td>
+      <td>303.515468</td>
+      <td>197.169829</td>
+      <td>92121.639486</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="output stream stdout">
+<pre><code>
+See the whole table with table.as_data_frame()
+
+Variable Importances: 
+</code></pre>
+</div>
+<div class="output display_data">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>relative_importance</th>
+      <th>scaled_importance</th>
+      <th>percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>registered</td>
+      <td>4.292676e+10</td>
+      <td>1.000000</td>
+      <td>0.472819</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>instant</td>
+      <td>1.604260e+10</td>
+      <td>0.373720</td>
+      <td>0.176702</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>casual</td>
+      <td>1.151465e+10</td>
+      <td>0.268240</td>
+      <td>0.126829</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dteday</td>
+      <td>5.554698e+09</td>
+      <td>0.129399</td>
+      <td>0.061183</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>atemp</td>
+      <td>4.804760e+09</td>
+      <td>0.111929</td>
+      <td>0.052922</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>temp</td>
+      <td>3.446448e+09</td>
+      <td>0.080287</td>
+      <td>0.037961</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>yr</td>
+      <td>2.623944e+09</td>
+      <td>0.061126</td>
+      <td>0.028902</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>mnth</td>
+      <td>9.810035e+08</td>
+      <td>0.022853</td>
+      <td>0.010805</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>hum</td>
+      <td>6.395802e+08</td>
+      <td>0.014899</td>
+      <td>0.007045</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>season</td>
+      <td>4.949148e+08</td>
+      <td>0.011529</td>
+      <td>0.005451</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>weathersit</td>
+      <td>4.782626e+08</td>
+      <td>0.011141</td>
+      <td>0.005268</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>windspeed</td>
+      <td>4.628112e+08</td>
+      <td>0.010781</td>
+      <td>0.005098</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>workingday</td>
+      <td>4.419620e+08</td>
+      <td>0.010296</td>
+      <td>0.004868</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>weekday</td>
+      <td>3.488624e+08</td>
+      <td>0.008127</td>
+      <td>0.003843</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>holiday</td>
+      <td>2.770975e+07</td>
+      <td>0.000646</td>
+      <td>0.000305</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="output execute_result" data-execution_count="16">
+<pre><code></code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="18">
+<div class="sourceCode" id="cb72"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>exp <span class="op">=</span> day_drf.explain(test_day)</span></code></pre></div>
+<div class="output display_data">
+<h1>Residual Analysis</h1>
+</div>
+<div class="output display_data">
+<blockquote>Residual Analysis plots the fitted values vs residuals on a test dataset. Ideally, residuals should be randomly distributed. Patterns in this plot can indicate potential problems with the model selection, e.g., using simpler model than necessary, not accounting for heteroscedasticity, autocorrelation, etc. Note that if you see "striped" lines of residuals, that is an artifact of having an integer valued (vs a real valued) response variable.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/a4fe1c2a83eb2bf43a77c073c6fd151835638bcd.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Variable Importance</h1>
+</div>
+<div class="output display_data">
+<blockquote>The variable importance plot shows the relative importance of the most important variables in the model.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/cec751fbc598e9fb6701abef6e7925123280cbe6.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>SHAP Summary</h1>
+</div>
+<div class="output display_data">
+<blockquote>SHAP summary plot shows the contribution of the features for each instance (row of data). The sum of the feature contributions and the bias term is equal to the raw prediction of the model, i.e., prediction before applying inverse link function.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/632eeeb94bbd98b3c7e667c48ec6cb46b427f5c0.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Partial Dependence Plots</h1>
+</div>
+<div class="output display_data">
+<blockquote>Partial dependence plot (PDP) gives a graphical depiction of the marginal effect of a variable on the response. The effect of a variable is measured in change in the mean response. PDP assumes independence between the feature for which is the PDP computed and the rest.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1d8e550ebd838f454978e561eb0222ebf55257a2.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/ad5e8b81717f7fd5b0458f57c3d3010271e2f01b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e82708d51af9705e1103f76551cf1c6ecbbd70ea.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0deb8eb3c490e60a1121aac8ef2a0190e67342e1.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/ccf6fce408780db92e3386b071ec5b63ec1d7a01.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Individual Conditional Expectation</h1>
+</div>
+<div class="output display_data">
+<blockquote>An Individual Conditional Expectation (ICE) plot gives a graphical depiction of the marginal effect of a variable on the response. ICE plots are similar to partial dependence plots (PDP); PDP shows the average effect of a feature while ICE plot shows the effect for a single instance. This function will plot the effect for each decile. In contrast to the PDP, ICE plots can provide more insight, especially when there is stronger feature interaction.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/8d4910807ce2d11c7fa6104529d6acfb7638eaea.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/01958fedae4086f0e313e1122f0fa2110c876eda.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/acebd9401d5b3ba5e1901a224a127ba3bbfcd642.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/f5b4668ce4449cf08db6a8262eca11b40d6d6613.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1cd10774b84034b76ca5473e641736470f186619.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="19">
+<div class="sourceCode" id="cb86"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>perf <span class="op">=</span> day_drf.model_performance()</span></code></pre></div>
+</div>
+<div class="cell code" data-execution_count="20">
+<div class="sourceCode" id="cb87"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>perf</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>
+ModelMetricsRegression: drf
+** Reported on train data. **
+
+MSE: 62326.14284087241
+RMSE: 249.65204353434083
+MAE: 165.077141119547
+RMSLE: 0.20839974594870989
+Mean Residual Deviance: 62326.14284087241
+</code></pre>
+</div>
+<div class="output execute_result" data-execution_count="20">
+<pre><code></code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="21">
+<div class="sourceCode" id="cb90"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>pred1 <span class="op">=</span> day_drf.predict(test_day)</span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>pred1</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>drf prediction progress: |███████████████████████████████████████████████████████| (done) 100%
+</code></pre>
+</div>
+<div class="output display_data">
+<table>
+<thead>
+<tr><th style="text-align: right;">  predict</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: right;">  1397.74</td></tr>
+<tr><td style="text-align: right;">  1387.14</td></tr>
+<tr><td style="text-align: right;">  1481.84</td></tr>
+<tr><td style="text-align: right;">  1637.42</td></tr>
+<tr><td style="text-align: right;">  1565.3 </td></tr>
+<tr><td style="text-align: right;">  1414.7 </td></tr>
+<tr><td style="text-align: right;">  1537.84</td></tr>
+<tr><td style="text-align: right;">  2097.98</td></tr>
+<tr><td style="text-align: right;">  1090.4 </td></tr>
+<tr><td style="text-align: right;">  2031.74</td></tr>
+</tbody>
+</table>
+</div>
+<div class="output execute_result" data-execution_count="21">
+<pre><code></code></pre>
+</div>
+</div>
+<section id="testing-model-on-hour-dataset" class="cell markdown">
+<h3>testing model on hour dataset</h3>
+</section>
+<div class="cell code" data-execution_count="24">
+<div class="sourceCode" id="cb93"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run AutoML for 10 minutes</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>aml1 <span class="op">=</span> H2OAutoML(max_runtime_secs<span class="op">=</span><span class="dv">600</span>, seed<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>aml1.train(y<span class="op">=</span>y, training_frame<span class="op">=</span>train_hour)</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>AutoML progress: |
+13:09:22.206: AutoML: XGBoost is not available; skipping it.
+
+█████████████████████████████████████████████████████████████
+13:19:09.886: GBM_lr_annealing_selection_AutoML_3_20220907_130922 [GBM lr_annealing] failed: water.exceptions.H2OIllegalArgumentException: Can only convert jobs producing a single Model or ModelContainer.
+
+██| (done) 100%
+Model Details
+=============
+H2OStackedEnsembleEstimator :  Stacked Ensemble
+Model Key:  StackedEnsemble_BestOfFamily_4_AutoML_3_20220907_130922
+
+No model summary for this model
+
+ModelMetricsRegressionGLM: stackedensemble
+** Reported on train data. **
+
+MSE: 1258.9476291990875
+RMSE: 35.48165200775025
+MAE: 24.896512727043255
+RMSLE: 0.10600362528522075
+R^2: 0.9996690327869583
+Mean Residual Deviance: 1258.9476291990875
+Null degrees of freedom: 581
+Residual degrees of freedom: 578
+Null deviance: 2213837175.773192
+Residual deviance: 732707.5201938689
+AIC: 5815.978748424268
+
+ModelMetricsRegressionGLM: stackedensemble
+** Reported on cross-validation data. **
+
+MSE: 12578.32764537484
+RMSE: 112.1531437159692
+MAE: 71.20104475331684
+RMSLE: 0.13525461142938738
+R^2: 0.9966932587591717
+Mean Residual Deviance: 12578.32764537484
+Null degrees of freedom: 581
+Residual degrees of freedom: 579
+Null deviance: 2219192803.1367702
+Residual deviance: 7320586.689608158
+AIC: 7153.567652449707
+
+Cross-Validation Metrics Summary: 
+</code></pre>
+</div>
+<div class="output display_data">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th></th>
+      <th>mean</th>
+      <th>sd</th>
+      <th>cv_1_valid</th>
+      <th>cv_2_valid</th>
+      <th>cv_3_valid</th>
+      <th>cv_4_valid</th>
+      <th>cv_5_valid</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>mae</td>
+      <td>7.137226e+01</td>
+      <td>5.809484e+00</td>
+      <td>7.783733e+01</td>
+      <td>6.952254e+01</td>
+      <td>6.440047e+01</td>
+      <td>6.816872e+01</td>
+      <td>7.693224e+01</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>mean_residual_deviance</td>
+      <td>1.247567e+04</td>
+      <td>3.592655e+03</td>
+      <td>1.777188e+04</td>
+      <td>1.241277e+04</td>
+      <td>9.174656e+03</td>
+      <td>9.184521e+03</td>
+      <td>1.383456e+04</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>mse</td>
+      <td>1.247567e+04</td>
+      <td>3.592655e+03</td>
+      <td>1.777188e+04</td>
+      <td>1.241277e+04</td>
+      <td>9.174656e+03</td>
+      <td>9.184521e+03</td>
+      <td>1.383456e+04</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>null_deviance</td>
+      <td>4.438386e+08</td>
+      <td>4.686818e+07</td>
+      <td>5.185790e+08</td>
+      <td>4.447762e+08</td>
+      <td>3.909163e+08</td>
+      <td>4.240999e+08</td>
+      <td>4.408214e+08</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>r2</td>
+      <td>9.967412e-01</td>
+      <td>6.805248e-04</td>
+      <td>9.958859e-01</td>
+      <td>9.965095e-01</td>
+      <td>9.974034e-01</td>
+      <td>9.974725e-01</td>
+      <td>9.964347e-01</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>residual_deviance</td>
+      <td>1.458895e+06</td>
+      <td>4.542699e+05</td>
+      <td>2.132625e+06</td>
+      <td>1.551596e+06</td>
+      <td>1.009212e+06</td>
+      <td>1.065404e+06</td>
+      <td>1.535636e+06</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>rmse</td>
+      <td>1.107929e+02</td>
+      <td>1.583539e+01</td>
+      <td>1.333112e+02</td>
+      <td>1.114126e+02</td>
+      <td>9.578442e+01</td>
+      <td>9.583591e+01</td>
+      <td>1.176204e+02</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>rmsle</td>
+      <td>8.615576e-02</td>
+      <td>1.208886e-01</td>
+      <td>4.658548e-02</td>
+      <td>2.936268e-02</td>
+      <td>2.132209e-02</td>
+      <td>3.171847e-02</td>
+      <td>3.017901e-01</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="output execute_result" data-execution_count="24">
+<pre><code></code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="25">
+<div class="sourceCode" id="cb96"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explain leader model &amp; compare with all AutoML models</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>exa1 <span class="op">=</span> aml1.explain(test_hour)</span></code></pre></div>
+<div class="output display_data">
+<h1>Leaderboard</h1>
+</div>
+<div class="output display_data">
+<blockquote>Leaderboard shows models with their metrics. When provided with H2OAutoML object, the leaderboard shows 5-fold cross-validated metrics by default (depending on the H2OAutoML settings), otherwise it shows metrics computed on the frame. At most 20 models are shown by default.</blockquote>
+</div>
+<div class="output display_data">
+<table>
+<thead>
+<tr><th>model_id                                               </th><th style="text-align: right;">   rmse</th><th style="text-align: right;">    mse</th><th style="text-align: right;">    mae</th><th style="text-align: right;">   rmsle</th><th style="text-align: right;">  mean_residual_deviance</th><th style="text-align: right;">  training_time_ms</th><th style="text-align: right;">  predict_time_per_row_ms</th><th>algo           </th></tr>
+</thead>
+<tbody>
+<tr><td>StackedEnsemble_BestOfFamily_4_AutoML_3_20220907_130922</td><td style="text-align: right;">112.153</td><td style="text-align: right;">12578.3</td><td style="text-align: right;">71.201 </td><td style="text-align: right;">0.135255</td><td style="text-align: right;">                 12578.3</td><td style="text-align: right;">               131</td><td style="text-align: right;">                 0.040794</td><td>StackedEnsemble</td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_170          </td><td style="text-align: right;">116.614</td><td style="text-align: right;">13598.9</td><td style="text-align: right;">72.5635</td><td style="text-align: right;">0.135252</td><td style="text-align: right;">                 13598.9</td><td style="text-align: right;">               456</td><td style="text-align: right;">                 0.022113</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_119          </td><td style="text-align: right;">118.467</td><td style="text-align: right;">14034.3</td><td style="text-align: right;">72.1934</td><td style="text-align: right;">0.133282</td><td style="text-align: right;">                 14034.3</td><td style="text-align: right;">               543</td><td style="text-align: right;">                 0.025207</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_144          </td><td style="text-align: right;">119.997</td><td style="text-align: right;">14399.2</td><td style="text-align: right;">75.3739</td><td style="text-align: right;">0.134049</td><td style="text-align: right;">                 14399.2</td><td style="text-align: right;">               617</td><td style="text-align: right;">                 0.027906</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_160          </td><td style="text-align: right;">125.164</td><td style="text-align: right;">15666  </td><td style="text-align: right;">76.854 </td><td style="text-align: right;">0.130777</td><td style="text-align: right;">                 15666  </td><td style="text-align: right;">               486</td><td style="text-align: right;">                 0.032489</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_130          </td><td style="text-align: right;">128.745</td><td style="text-align: right;">16575.2</td><td style="text-align: right;">87.5051</td><td style="text-align: right;">0.141222</td><td style="text-align: right;">                 16575.2</td><td style="text-align: right;">               324</td><td style="text-align: right;">                 0.016242</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_12           </td><td style="text-align: right;">129.436</td><td style="text-align: right;">16753.7</td><td style="text-align: right;">81.1774</td><td style="text-align: right;">0.14207 </td><td style="text-align: right;">                 16753.7</td><td style="text-align: right;">               444</td><td style="text-align: right;">                 0.021597</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_58           </td><td style="text-align: right;">129.673</td><td style="text-align: right;">16815.1</td><td style="text-align: right;">82.1813</td><td style="text-align: right;">0.136208</td><td style="text-align: right;">                 16815.1</td><td style="text-align: right;">              1331</td><td style="text-align: right;">                 0.028942</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_32           </td><td style="text-align: right;">134.593</td><td style="text-align: right;">18115.3</td><td style="text-align: right;">85.4334</td><td style="text-align: right;">0.155214</td><td style="text-align: right;">                 18115.3</td><td style="text-align: right;">               487</td><td style="text-align: right;">                 0.02582 </td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_42           </td><td style="text-align: right;">135.066</td><td style="text-align: right;">18242.9</td><td style="text-align: right;">90.5244</td><td style="text-align: right;">0.152135</td><td style="text-align: right;">                 18242.9</td><td style="text-align: right;">               355</td><td style="text-align: right;">                 0.020614</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_112          </td><td style="text-align: right;">135.286</td><td style="text-align: right;">18302.3</td><td style="text-align: right;">86.8393</td><td style="text-align: right;">0.16457 </td><td style="text-align: right;">                 18302.3</td><td style="text-align: right;">               451</td><td style="text-align: right;">                 0.02315 </td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_98           </td><td style="text-align: right;">136.104</td><td style="text-align: right;">18524.4</td><td style="text-align: right;">88.0104</td><td style="text-align: right;">0.155452</td><td style="text-align: right;">                 18524.4</td><td style="text-align: right;">               503</td><td style="text-align: right;">                 0.028021</td><td>GBM            </td></tr>
+<tr><td>StackedEnsemble_BestOfFamily_5_AutoML_3_20220907_130922</td><td style="text-align: right;">137.219</td><td style="text-align: right;">18829  </td><td style="text-align: right;">90.5517</td><td style="text-align: right;">0.153147</td><td style="text-align: right;">                 18829  </td><td style="text-align: right;">              1155</td><td style="text-align: right;">                 0.049753</td><td>StackedEnsemble</td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_181          </td><td style="text-align: right;">137.609</td><td style="text-align: right;">18936.2</td><td style="text-align: right;">84.6463</td><td style="text-align: right;">0.157829</td><td style="text-align: right;">                 18936.2</td><td style="text-align: right;">               487</td><td style="text-align: right;">                 0.019056</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_135          </td><td style="text-align: right;">139.291</td><td style="text-align: right;">19401.9</td><td style="text-align: right;">89.6327</td><td style="text-align: right;">0.160469</td><td style="text-align: right;">                 19401.9</td><td style="text-align: right;">               421</td><td style="text-align: right;">                 0.029253</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_120          </td><td style="text-align: right;">139.333</td><td style="text-align: right;">19413.8</td><td style="text-align: right;">86.556 </td><td style="text-align: right;">0.142031</td><td style="text-align: right;">                 19413.8</td><td style="text-align: right;">               448</td><td style="text-align: right;">                 0.018657</td><td>GBM            </td></tr>
+<tr><td>GBM_grid_1_AutoML_3_20220907_130922_model_5            </td><td style="text-align: right;">140.643</td><td style="text-align: right;">19780.4</td><td style="text-align: right;">88.0981</td><td style="text-align: right;">0.145773</td><td style="text-align: right;">                 19780.4</td><td style="text-align: right;">               493</td><td style="text-align: right;">                 0.036455</td><td>GBM            </td></tr>
+<tr><td>StackedEnsemble_AllModels_1_AutoML_3_20220907_130922   </td><td style="text-align: right;">141.617</td><td style="text-align: right;">20055.3</td><td style="text-align: right;">90.5924</td><td style="text-align: right;">0.17251 </td><td style="text-align: right;">                 20055.3</td><td style="text-align: right;">               143</td><td style="text-align: right;">                 0.05361 </td><td>StackedEnsemble</td></tr>
+<tr><td>StackedEnsemble_AllModels_2_AutoML_3_20220907_130922   </td><td style="text-align: right;">142.045</td><td style="text-align: right;">20176.7</td><td style="text-align: right;">91.0217</td><td style="text-align: right;">0.172198</td><td style="text-align: right;">                 20176.7</td><td style="text-align: right;">               153</td><td style="text-align: right;">                 0.058569</td><td>StackedEnsemble</td></tr>
+<tr><td>StackedEnsemble_BestOfFamily_2_AutoML_3_20220907_130922</td><td style="text-align: right;">142.201</td><td style="text-align: right;">20221.2</td><td style="text-align: right;">91.5813</td><td style="text-align: right;">0.171904</td><td style="text-align: right;">                 20221.2</td><td style="text-align: right;">               140</td><td style="text-align: right;">                 0.030556</td><td>StackedEnsemble</td></tr>
+</tbody>
+</table>
+</div>
+<div class="output display_data">
+<pre><code></code></pre>
+</div>
+<div class="output display_data">
+<h1>Residual Analysis</h1>
+</div>
+<div class="output display_data">
+<blockquote>Residual Analysis plots the fitted values vs residuals on a test dataset. Ideally, residuals should be randomly distributed. Patterns in this plot can indicate potential problems with the model selection, e.g., using simpler model than necessary, not accounting for heteroscedasticity, autocorrelation, etc. Note that if you see "striped" lines of residuals, that is an artifact of having an integer valued (vs a real valued) response variable.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/14d5f3ebbb442574f155d0292e656318fd884f7e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Variable Importance</h1>
+</div>
+<div class="output display_data">
+<blockquote>The variable importance plot shows the relative importance of the most important variables in the model.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/bf35dddf6fc5198da11bc5ce48a6d212be50cbac.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Variable Importance Heatmap</h1>
+</div>
+<div class="output display_data">
+<blockquote>Variable importance heatmap shows variable importance across multiple models. Some models in H2O return variable importance for one-hot (binary indicator) encoded versions of categorical columns (e.g. Deep Learning, XGBoost). In order for the variable importance of categorical columns to be compared across all model types we compute a summarization of the the variable importance across all one-hot encoded features and return a single variable importance for the original categorical feature. By default, the models and variables are ordered by their similarity.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/aa64a44348bb7126ac0454cb50e9111d4bb1b6e0.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Model Correlation</h1>
+</div>
+<div class="output display_data">
+<blockquote>This plot shows the correlation between the predictions of the models. For classification, frequency of identical predictions is used. By default, models are ordered by their similarity (as computed by hierarchical clustering). Interpretable models, such as GAM, GLM, and RuleFit are highlighted using red colored text.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/a750213e926d4bdcb9ff4fe722b273a437009224.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>SHAP Summary</h1>
+</div>
+<div class="output display_data">
+<blockquote>SHAP summary plot shows the contribution of the features for each instance (row of data). The sum of the feature contributions and the bias term is equal to the raw prediction of the model, i.e., prediction before applying inverse link function.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/00d5fe901f145cd744a83feee5584e1852e13c0b.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Partial Dependence Plots</h1>
+</div>
+<div class="output display_data">
+<blockquote>Partial dependence plot (PDP) gives a graphical depiction of the marginal effect of a variable on the response. The effect of a variable is measured in change in the mean response. PDP assumes independence between the feature for which is the PDP computed and the rest.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/042fed4a72f942991f7b160128ad3183a0c70f37.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/db042e1356dc15fc8256d1f965851384b4ae509e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/aae8abcdb1b70a5d9c4f31029c9a6345d9508e07.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/23e41f7c5694ed73e0e63dce86aac5e48bdf9048.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/2db737bacbcd26e261e9257050a921c424789c72.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Individual Conditional Expectation</h1>
+</div>
+<div class="output display_data">
+<blockquote>An Individual Conditional Expectation (ICE) plot gives a graphical depiction of the marginal effect of a variable on the response. ICE plots are similar to partial dependence plots (PDP); PDP shows the average effect of a feature while ICE plot shows the effect for a single instance. This function will plot the effect for each decile. In contrast to the PDP, ICE plots can provide more insight, especially when there is stronger feature interaction.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0b248824c0c07cdb2e7a78255eb8bfe90ba9aa7e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/bd0bd5910fbfd3e891e052bd688119a262a396db.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0ea3c566688694aa597dc1f35ef2bda650cb36df.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/377fc7d3c49ebe84cb0835ddd084f696ec41ef51.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1a711453c30c8f879bbdbac66a04979247833b61.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="26">
+<div class="sourceCode" id="cb113"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explain a single H2O model (e.g. leader model from AutoML)</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>exm1 <span class="op">=</span> aml1.leader.explain(test_hour)</span></code></pre></div>
+<div class="output display_data">
+<h1>Residual Analysis</h1>
+</div>
+<div class="output display_data">
+<blockquote>Residual Analysis plots the fitted values vs residuals on a test dataset. Ideally, residuals should be randomly distributed. Patterns in this plot can indicate potential problems with the model selection, e.g., using simpler model than necessary, not accounting for heteroscedasticity, autocorrelation, etc. Note that if you see "striped" lines of residuals, that is an artifact of having an integer valued (vs a real valued) response variable.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/14d5f3ebbb442574f155d0292e656318fd884f7e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Partial Dependence Plots</h1>
+</div>
+<div class="output display_data">
+<blockquote>Partial dependence plot (PDP) gives a graphical depiction of the marginal effect of a variable on the response. The effect of a variable is measured in change in the mean response. PDP assumes independence between the feature for which is the PDP computed and the rest.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/eb5a003601af9cfacd889f664ad029a99a89267a.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/abfdc3983add36f2de138d0b6a95d2fa5ce4113c.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/b63dc9d750c6694f13b2ce59c49a0a1d0e47a411.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/9590cf082ded9ba9c90e783f257b063d5f011016.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/40a840adebbbbe24bc37d0f50af595c706554477.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/4e156143ecd1913a7b8fae0b2f822eac4fa48e70.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/4fceeec8d81bdc9337e3b93a235f9106013569d2.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/dd17608c30168201c5e53e1fc7edc50292833295.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0394c813e4f68ad806eb1a00ea92347ac45809c1.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/6f2826e2a99ea34e5773f04ee4e888ceab97c943.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/a90396b04118bb30ef2c1bd83c4fd2d50c3c84f1.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c4533de104d0506140f39f8ed796c87f61980ddc.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/a05519e5077f96a8a5f2077f97d59deca22decf3.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/533fb21f9a47a4b34de5318c57e26869648c5e4e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/d7012678bb175ed8b347570c587dd83ca0f3841d.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<h1>Individual Conditional Expectation</h1>
+</div>
+<div class="output display_data">
+<blockquote>An Individual Conditional Expectation (ICE) plot gives a graphical depiction of the marginal effect of a variable on the response. ICE plots are similar to partial dependence plots (PDP); PDP shows the average effect of a feature while ICE plot shows the effect for a single instance. This function will plot the effect for each decile. In contrast to the PDP, ICE plots can provide more insight, especially when there is stronger feature interaction.</blockquote>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0ea3c566688694aa597dc1f35ef2bda650cb36df.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/377fc7d3c49ebe84cb0835ddd084f696ec41ef51.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/ba9170671140559a5c430083a7a2b42363be7916.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/29c75f0adb261f3c7a6c18297863d7df58d97183.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0cad2696d54964175c48bc2194f636d2458ced87.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/c9523f59dd7cbe712e17b9e79c7b8353c38235b7.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/a3e272cb045091d36a1a71abec928a20284f3126.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/e9b42bf2b312cdac0d87b1833ed34670052296a9.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/b5d2e89d764160ad5833b7cd3ec024432c8d88bd.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/266854f77a5138e4e0fdfa3ae9cd7ff3234f94ef.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/f8196097b9e45ae436c62d52f30d6c08233c3728.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/1a711453c30c8f879bbdbac66a04979247833b61.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/dc827a31fc096860bb199e6d1d6b7ba39860b51a.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/bd0bd5910fbfd3e891e052bd688119a262a396db.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+<div class="output display_data">
+<p><img src="explainable_ai/0b248824c0c07cdb2e7a78255eb8bfe90ba9aa7e.png" /></p>
+</div>
+<div class="output stream stdout">
+<pre><code>
+
+</code></pre>
+</div>
+</div>
+<div class="cell code" data-execution_count="27">
+<div class="sourceCode" id="cb145"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a>pred2 <span class="op">=</span> aml1.predict(test_day)</span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a>pred2</span></code></pre></div>
+<div class="output stream stdout">
+<pre><code>stackedensemble prediction progress: |███████████████████████████████████████████| (done) 100%
+</code></pre>
+</div>
+<div class="output display_data">
+<table>
+<thead>
+<tr><th style="text-align: right;">  predict</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: right;"> 1340.39 </td></tr>
+<tr><td style="text-align: right;"> 1321.32 </td></tr>
+<tr><td style="text-align: right;"> 1480.84 </td></tr>
+<tr><td style="text-align: right;"> 1735.76 </td></tr>
+<tr><td style="text-align: right;"> 1574.51 </td></tr>
+<tr><td style="text-align: right;"> 1141.98 </td></tr>
+<tr><td style="text-align: right;"> 1468.79 </td></tr>
+<tr><td style="text-align: right;"> 2112.92 </td></tr>
+<tr><td style="text-align: right;">  636.315</td></tr>
+<tr><td style="text-align: right;"> 1995.98 </td></tr>
+</tbody>
+</table>
+</div>
+<div class="output execute_result" data-execution_count="27">
+<pre><code></code></pre>
+</div>
+</div>
+<div class="cell code">
+<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+</div>
+</body>
+</html>
